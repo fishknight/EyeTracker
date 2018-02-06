@@ -11,3 +11,7 @@ class Webcam():
         result, frame = self.capture.read()
         gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
         cv2.imshow('thing', gray)
+
+    def stop_webcam(self):
+        self.capture.release()
+        cv2.destroyAllWindows()
