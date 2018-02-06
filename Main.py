@@ -1,13 +1,13 @@
 import pygame
 import Constants
-
+import Webcam
 
 
 class Main():
     def __init__(self):
         # initialize important things
         pygame.init()
-
+        self.cam = Webcam.Webcam()
         # set screen width/height and caption
         self.screen = pygame.display.set_mode(Constants.SCREEN_SIZE, pygame.FULLSCREEN)
         pygame.display.set_caption('Eye Tracker')
@@ -36,8 +36,11 @@ class Main():
                     if event.key == pygame.K_r:
                         self.screen.fill((0, 128, 255))
 
-            # write game logic here
+            # write logic here
 
+
+            #camera feed
+            self.cam.get_webcam_feed()
             # write draw code here
                 #screen.blit(img,(X, Y))
             # display what drawn this might change
