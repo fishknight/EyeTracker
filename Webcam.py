@@ -1,12 +1,10 @@
-import Constants
 import cv2
+import numpy
 
-
-class Webcam:
+class Webcam():
     def __init__(self):
+        # initialize webcam video
         self.capture = cv2.VideoCapture(0)
-        if self.capture.isOpened():  # Checks the stream
-            self.frameSize = (int(self.capture.get(cv2.cv.CV_CAP_PROP_FRAME_HEIGHT)),
-                              int(self.capture.get(cv2.cv.CV_CAP_PROP_FRAME_WIDTH)))
-        Constants.SCREEN_HEIGHT = self.frameSize[0]
-        Constants.SCREEN_WIDTH = self.frameSize[1]
+    def get_webcam_feed(self):
+        result, frame = self.capture.read()
+        gray = cv2.cvtColor(frame,cv2.COLOR_BGR2GRAY)
