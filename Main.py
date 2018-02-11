@@ -10,7 +10,9 @@ class Main:
         self.cam = Webcam.Webcam()
         self.textFont = pygame.font.SysFont('monospace', 15)
         # set screen width/height and caption
-        self.screen = pygame.display.set_mode(Constants.SCREEN_SIZE, pygame.FULLSCREEN)
+        # must be 16:9 aspect ratio
+        self.screen = pygame.display.set_mode((1024, 576))                                      # testing purposes only
+        #self.screen = pygame.display.set_mode(Constants.SCREEN_SIZE, pygame.FULLSCREEN)        # actual size
         pygame.display.set_caption('Eye Tracker')
 
         # initialize clock. used later in the loop.

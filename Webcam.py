@@ -1,35 +1,47 @@
 import cv2
+import Constants
 
 class Webcam():
     def __init__(self):
         # initialize webcam video
         self.capture = cv2.VideoCapture(0)
-        self.eyeCascade = cv2.CascadeClassifier('haarcascade_eye.xml')
-        self.faceCascade = cv2.CascadeClassifier('haarcascade_frontalface_default.xml')
+        self.eyeCascade = cv2.CascadeClassifier(Constants.CASCADE_EYE)
+        self.faceCascade = cv2.CascadeClassifier(Constants.CASCADE_FACE)
 
     #load webcam results in background
     def get_webcam_feed(self):
-        result, frame = self.capture.read()
-        gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
+        result, self.frame = self.capture.read()
 
+        #change video color to gray for analysis
+        gray = cv2.cvtColor(self.frame, cv2.COLOR_BGR2GRAY)
+
+        #get eye position
+        self.get_eye_position(gray)
+
+        #show camera video
+        cv2.imshow('thing', self.frame)
+
+    def stop_webcam(self):
+        #close all windows
+        self.capture.release()
+        cv2.destroyAllWindows()
+
+    def get_eye_position(self, gray):
         # check face and check eye position
         # draw rectangle around detected face and eyes
         face = self.faceCascade.detectMultiScale(gray, 1.3, 5)
         for (x, y, w, h) in face:
-            #print "Face coordinates", x, y, w, h
-            cv2.rectangle(frame, (x, y), (x + w, y + h), (255, 0, 0), 2)
-            roi_eye_color = frame[y:y + h, x:x + w]
+            cv2.rectangle(self.frame,           # image
+                          (x, y),               # starting point
+                          (x + w, y + h),       # end point
+                          (255, 0, 0),          # color
+                          2)                    # thickness
+            roi_eye_color = self.frame[y:y + h, x:x + w]
             roi_eye = gray[y:y + h, x:x + w]
             eye = self.eyeCascade.detectMultiScale(roi_eye)
             for (ex, ey, eh, ew) in eye:
-                xCoord = int((ex + ew)/2)
-                yCoord = int((ey + eh)/2)
-                print "Eyes Coordinates", ex, ey,ew, eh
-                cv2.circle(roi_eye_color, (xCoord, yCoord), 8, (0,0,255), 2)
-                cv2.rectangle(roi_eye_color, (ex, ey), (ex + ew, ey + eh), (0, 255, 0), 1)
-        cv2.imshow('thing', frame)
-
-
-    def stop_webcam(self):
-        self.capture.release()
-        cv2.destroyAllWindows()
+                xCoord = int(ex + (ew / 1.8))
+                yCoord = int(ey + (eh / 2.1))
+                print "Eyes Center Coordinates: (", xCoord, ",", yCoord, ")"
+                cv2.circle(roi_eye_color, (xCoord, yCoord), 3, (0, 0, 255), 1)
+        # should return eyes coordinates
