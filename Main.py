@@ -3,7 +3,7 @@ import Constants
 import Webcam
 
 
-class Main():
+class Main:
     def __init__(self):
         # initialize important things
         pygame.init()
