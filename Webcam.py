@@ -40,7 +40,7 @@ class Webcam():
                 xCoord = int(ex + (ew / 1.8))
                 yCoord = int(ey + (eh / 2.1))
                 if yCoord < (y + int(h*0.35)): 
-                    print "Eyes Center Coordinates: (", xCoord, ",", yCoord, ")"
+                    #print "Eyes Center Coordinates: (", xCoord, ",", yCoord, ")"
                     cv2.circle(roi_eye_color, (xCoord, yCoord), 3, (0, 0, 255), 1)
                     self.coordinates.append((xCoord, yCoord))
 
