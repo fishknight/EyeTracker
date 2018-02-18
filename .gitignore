@@ -1,2 +1,6 @@
 venv
 .idea
+Constants.pyc
+Webcam.pyc
+Main.pyc
+.vscode

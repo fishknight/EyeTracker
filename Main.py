@@ -2,7 +2,6 @@ import pygame
 import Constants
 import Webcam
 
-
 class Main:
     def __init__(self):
         # initialize important things
@@ -51,6 +50,9 @@ class Main:
         #close everything
         self.cam.stop_webcam()
         pygame.quit()
+
+        #checking purposes
+        print self.cam.get_eyes_coordinates()
 
 
 if __name__ == '__main__':
