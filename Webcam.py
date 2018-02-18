@@ -40,10 +40,14 @@ class Webcam():
                 xCoord = int(ex + (ew / 1.8))
                 yCoord = int(ey + (eh / 2.1))
                 if yCoord < (y + int(h*0.35)): 
-                    #print "Eyes Center Coordinates: (", xCoord, ",", yCoord, ")"
                     cv2.circle(roi_eye_color, (xCoord, yCoord), 3, (0, 0, 255), 1)
                     self.coordinates.append((xCoord, yCoord))
 
     def get_eyes_coordinates(self):
-        return self.coordinates
+        lolol = []
+        for x in xrange(len(self.coordinates)):
+            if x == 0 or (x % 20) == 0:
+                lolol.append(self.coordinates[x])
+        return lolol
         # should return eyes coordinates
+    

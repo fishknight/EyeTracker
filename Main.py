@@ -10,8 +10,8 @@ class Main:
         self.textFont = pygame.font.SysFont('monospace', 15)
         # set screen width/height and caption
         # must be 16:9 aspect ratio
-        #self.screen = pygame.display.set_mode((1024, 576))                                      # testing purposes only
-        self.screen = pygame.display.set_mode(Constants.SCREEN_SIZE, pygame.FULLSCREEN)        # actual size
+        self.screen = pygame.display.set_mode((1024, 576))                                      # testing purposes only
+        #self.screen = pygame.display.set_mode(Constants.SCREEN_SIZE, pygame.FULLSCREEN)        # actual size
         pygame.display.set_caption('Eye Tracker')
 
         # initialize clock. used later in the loop.
@@ -34,9 +34,9 @@ class Main:
                         done = True
                     if event.key == pygame.K_g:
                         linesToDraw = self.cam.get_eyes_coordinates()
-                        print linesToDraw
                         self.draw_lines(linesToDraw)
                     if event.key == pygame.K_p:
+                        self.screen.fill((255,255,255))
                         del linesToDraw[:]
 
             # write logic here
@@ -51,7 +51,7 @@ class Main:
             # display what drawn this might change
             pygame.display.update()
             # run at 60fps
-            self.clock.tick(60)
+            self.clock.tick(20)
 
     def stop(self):
         #close everything
@@ -61,10 +61,16 @@ class Main:
         #checking purposes
         print self.cam.get_eyes_coordinates()
     
-    #function for drawing lines
+    #draw new line for every 20th frame
     def draw_lines(self, coords = []):
+        '''
+        line = []
+        for x in xrange(len(coords)):
+            if x == 0 or (x % 20) == 0:
+                line.append(coords[x])
+        '''
         pygame.draw.lines(self.screen, (0,0,0), False, coords, 1)
-
+                
 
 if __name__ == '__main__':
     game = Main()
