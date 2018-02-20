@@ -5,7 +5,8 @@ class Webcam():
     def __init__(self):
         # initialize webcam video
         self.capture = cv2.VideoCapture(0)
-        self.eyeCascade = cv2.CascadeClassifier(Constants.CASCADE_EYE)
+        self.rightEyeCascade = cv2.CascadeClassifier(Constants.CASCADE_RIGHT_EYE)
+        self.leftEyeCascade = cv2.CascadeClassifier(Constants.CASCADE_LEFT_EYE)
         self.faceCascade = cv2.CascadeClassifier(Constants.CASCADE_FACE)
         self.coordinates = []
 
@@ -35,7 +36,7 @@ class Webcam():
             #cv2.rectangle(self.frame, (x, y), (x + w, y + int(h*0.6)), (255, 0, 0), 2)
             roi_eye_color = self.frame[y:y + h, x:x + w]
             roi_eye = gray[y:y + h, x:x + w]
-            eye = self.eyeCascade.detectMultiScale(roi_eye)
+            right_eye = self.eyeCascade.detectMultiScale(roi_eye)
             for (ex, ey, eh, ew) in eye:
                 xCoord = int(ex + (ew / 1.8))
                 yCoord = int(ey + (eh / 2.1))
@@ -44,10 +45,10 @@ class Webcam():
                     self.coordinates.append((xCoord, yCoord))
 
     def get_eyes_coordinates(self):
-        lolol = []
+        recordedCoordinates = []
         for x in xrange(len(self.coordinates)):
             if x == 0 or (x % 20) == 0:
-                lolol.append(self.coordinates[x])
-        return lolol
+                recordedCoordinates.append(self.coordinates[x])
+        return recordedCoordinates
         # should return eyes coordinates
     
