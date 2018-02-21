@@ -32,8 +32,11 @@ class Main:
                 if event.type == pygame.KEYDOWN:
                     if event.key == pygame.K_ESCAPE:
                         done = True
-                    if event.key == pygame.K_g:
-                        linesToDraw = self.cam.get_eyes_coordinates()
+                    if event.key == pygame.K_j:
+                        linesToDraw = self.cam.getRightEyeCoordinates()
+                        self.draw_lines(linesToDraw)
+                    if event.key == pygame.K_k:
+                        linesToDraw = self.cam.getLeftEyeCoordinates()
                         self.draw_lines(linesToDraw)
                     if event.key == pygame.K_p:
                         self.screen.fill((255,255,255))

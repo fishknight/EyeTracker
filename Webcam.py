@@ -7,6 +7,7 @@ class Webcam():
         self.capture = cv2.VideoCapture(0)
         self.eyeCascade = cv2.CascadeClassifier(Constants.CASCADE_EYES)
         self.faceCascade = cv2.CascadeClassifier(Constants.CASCADE_FACE)
+        self.coordinates = []
         self.right_eye_coordinates = []
         self.left_eye_coordinates = []
 
@@ -36,20 +37,39 @@ class Webcam():
             #cv2.rectangle(self.frame, (x, y), (x + w, y + int(h*0.6)), (255, 0, 0), 2)
             roi_eye_color = self.frame[y:y + h, x:x + w]
             roi_eye = gray[y:y + h, x:x + w]
-            right_eye = self.rightEyeCascade.detectMultiScale(roi_eye)
-            left_eye = self.leftEyeCascade.detectMultiScale(roi_eye_color)
-            for (ex, ey, eh, ew) in right_eye:
+            eye = self.eyeCascade.detectMultiScale(roi_eye)
+            for (ex, ey, eh, ew) in eye:
                 xCoord = int(ex + (ew / 1.8))
                 yCoord = int(ey + (eh / 2.1))
-                if yCoord < (y + int(h*0.35)): 
-                    cv2.circle(roi_eye_color, (xCoord, yCoord), 3, (0, 0, 255), 1)
-                    self.right_eye_coordinates.append((xCoord, yCoord))
+                if yCoord < (y + int(h * 0.35)): 
+                    #left eye
+                    if xCoord > (x + int(w * 0.5)):
+                        cv2.circle(roi_eye_color, (xCoord, yCoord), 3, (0, 0, 255), 1)
+                        self.left_eye_coordinates.append((xCoord, yCoord))
+                    #right eye
+                    else:
+                        cv2.circle(roi_eye_color, (xCoord, yCoord), 3, (128, 0, 255), 1)
+                        self.right_eye_coordinates.append((xCoord, yCoord))
+                    self.coordinates.append((xCoord, yCoord))
 
-    def get_eyes_coordinates(self, c = []):
+    def get_eyes_coordinates(self):
         recordedCoordinates = []
-        for x in xrange(len(c)):
-            if x == 0 or (x % 20) == 0:
-                recordedCoordinates.append(c[x])
+        for x in xrange(len(self.coordinates)):
+            if x == 0 or (x % 30) == 0:
+                recordedCoordinates.append(self.coordinates[x])
         return recordedCoordinates
         # should return eyes coordinates
     
+    def getRightEyeCoordinates(self):
+        recordedCoordinates = []
+        for x in xrange(len(self.right_eye_coordinates)):
+            if x == 0 or (x % 30) == 0:
+                recordedCoordinates.append(self.right_eye_coordinates[x])
+        return recordedCoordinates
+    
+    def getLeftEyeCoordinates(self):
+        recordedCoordinates = []
+        for x in xrange(len(self.left_eye_coordinates)):
+            if x == 0 or (x % 30) == 0:
+                recordedCoordinates.append(self.left_eye_coordinates[x])
+        return recordedCoordinates
