@@ -40,16 +40,16 @@ class Webcam():
             left_eye = self.leftEyeCascade.detectMultiScale(roi_eye_color)
             for (ex, ey, eh, ew) in right_eye:
                 xCoord = int(ex + (ew / 1.8))
-                rightyCoord = int(ey + (eh / 2.1))
-                if rightyCoord < (y + int(h*0.35)): 
-                    cv2.circle(roi_eye_color, (rightxCoord, rightyCoord), 3, (0, 0, 255), 1)
-                    self.right_eye_coordinates.append((rightxCoord, rightyCoord))
+                yCoord = int(ey + (eh / 2.1))
+                if yCoord < (y + int(h*0.35)): 
+                    cv2.circle(roi_eye_color, (xCoord, yCoord), 3, (0, 0, 255), 1)
+                    self.right_eye_coordinates.append((xCoord, yCoord))
 
-    def get_eyes_coordinates(self):
+    def get_eyes_coordinates(self, c = []):
         recordedCoordinates = []
-        for x in xrange(len(int((self.right_eye_coordinates + self.left_eye_coordinates)/2))):
+        for x in xrange(len(c)):
             if x == 0 or (x % 20) == 0:
-                recordedCoordinates.append()
+                recordedCoordinates.append(c[x])
         return recordedCoordinates
         # should return eyes coordinates
     
