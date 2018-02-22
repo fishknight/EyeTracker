@@ -50,8 +50,9 @@ class Main:
             # write draw code here
                 #label = self.textFont.render('text', 1, (255,255,255))
                 #screen.blit(label,(X, Y))
-            if self.cam.get_eyes_coordinates()[0] < 90:
-                pygame.draw.circle(self.screen, (0,0,0), self.cam.get_eyes_coordinates(), 2, 1)
+            if len(self.cam.get_eyes_coordinates()) > 0:
+                if self.cam.get_eyes_coordinates()[0] < 90:
+                    pygame.draw.circle(self.screen, (0,0,0), self.cam.get_eyes_coordinates(), 2, 1)
             # display what drawn this might change
             pygame.display.update()
             # run at 60fps
