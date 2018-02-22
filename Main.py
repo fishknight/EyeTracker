@@ -24,6 +24,8 @@ class Main:
         # Loop until the user clicks close button
         done = False
         linesToDraw = []
+        cornerNumber = 0
+        corner = []
         while not done:
             # write event handlers here
             for event in pygame.event.get():
@@ -33,30 +35,38 @@ class Main:
                     if event.key == pygame.K_ESCAPE:
                         done = True
                     if event.key == pygame.K_j:
-                        linesToDraw = self.cam.get_eyes_coordinates()
-                        self.draw_points(linesToDraw)
+                        linesToDraw = self.cam.coordinates
+                        self.draw_point_array(linesToDraw)
                         print "right", linesToDraw
                     if event.key == pygame.K_p:
                         self.screen.fill((255,255,255))
                         del linesToDraw[:]
                     if event.key == pygame.K_1:
                         self.drawPoint(self.cam.get_eyes_coordinates())
+                    if event.key == pygame.K_SPACE and cornerNumber < 4:
+                        #corner positionss
+                        #1  2
+                        #3  4
+                        self.corner.append(self.cam.get_eyes_coordinates())
+                        cornerNumber = cornerNumber+1
             # write logic here
-                #CONVERT COORDINATES TO 16:9 in relation to screen
-
+                #CONVERT COORDINATES TO 16:9 in relation to screen size
+            
             # camera feed while app is running
             self.cam.get_webcam_feed()
 
             # write draw code here
                 #label = self.textFont.render('text', 1, (255,255,255))
                 #screen.blit(label,(X, Y))
+            
             if len(self.cam.get_eyes_coordinates()) > 0:
                 if self.cam.get_eyes_coordinates()[0] < 90:
                     pygame.draw.circle(self.screen, (0,0,0), self.cam.get_eyes_coordinates(), 2, 1)
+            
             # display what drawn this might change
             pygame.display.update()
             # run at 60fps
-            self.clock.tick(20)
+            self.clock.tick(5)
 
     def stop(self):
         #close everything

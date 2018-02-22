@@ -5,7 +5,7 @@ class Webcam():
     def __init__(self):
         # initialize webcam video and variables
         self.capture = cv2.VideoCapture(0)
-        self.eyeCascade = cv2.CascadeClassifier(Constants.CASCADE_RIGHT_EYE)
+        self.eyeCascade = cv2.CascadeClassifier(Constants.CASCADE_EYES)
         self.faceCascade = cv2.CascadeClassifier(Constants.CASCADE_FACE)
         self.coordinates = []
 
@@ -48,7 +48,7 @@ class Webcam():
 
     def get_eyes_coordinates(self):
         point = (0,0)
-        if len(self.coordinates) > 0:
+        if self.coordinates:
             point = self.coordinates[len(self.coordinates)-1]
         return point
         # should return eyes coordinates
