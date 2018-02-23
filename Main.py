@@ -21,11 +21,13 @@ class Main:
         self.screen.fill((255, 255, 255))
 
     def start(self):
-        # Loop until the user clicks close button
+        #Initialize important variables
         done = False
         linesToDraw = []
         cornerNumber = 0
         corner = []
+        calibrationMode = True
+        # Loop until the user clicks close button
         while not done:
             # write event handlers here
             for event in pygame.event.get():
@@ -43,30 +45,34 @@ class Main:
                         del linesToDraw[:]
                     if event.key == pygame.K_1:
                         self.drawPoint(self.cam.get_eyes_coordinates())
-                    if event.key == pygame.K_SPACE and cornerNumber < 4:
+                    if event.key == pygame.K_SPACE and calibrationMode:
                         #corner positionss
                         #1  2
                         #3  4
                         self.corner.append(self.cam.get_eyes_coordinates())
                         cornerNumber = cornerNumber+1
+                        if cornerNumber > 3:
+                            calibrationMode = False
             # write logic here
-                #CONVERT COORDINATES TO 16:9 in relation to screen size
             
+            #TRANSLATION INFO: X AXIS IS INVERTED
             # camera feed while app is running
             self.cam.get_webcam_feed()
 
             # write draw code here
                 #label = self.textFont.render('text', 1, (255,255,255))
                 #screen.blit(label,(X, Y))
-            
+            if self.current_eye_position:
+                pygame.draw.circle(self.screen, (0,0,0), self.current_eye_position, 2, 1)
+            '''
             if len(self.cam.get_eyes_coordinates()) > 0:
                 if self.cam.get_eyes_coordinates()[0] < 90:
                     pygame.draw.circle(self.screen, (0,0,0), self.cam.get_eyes_coordinates(), 2, 1)
-            
+            '''
             # display what drawn this might change
             pygame.display.update()
             # run at 60fps
-            self.clock.tick(5)
+            self.clock.tick(3)
 
     def stop(self):
         #close everything
@@ -90,7 +96,17 @@ class Main:
         for point in coords:
             if point[0] < 90:
                 pygame.draw.circle(self.screen, (0,0,0), point, 2, 1)
-                
+
+    def calibrationMode(self, b = True):
+            if b:
+                print "Calibration Mode"
+                if corner:
+                    for tmp in corner:
+                        print tmp
+            else:
+                x = corner[1][0] - self.cam.get_eyes_coordinates[0]
+                y = self.cam.get_eyes_coordinates[1]
+                self.current_eye_position = (x, y)
 
 if __name__ == '__main__':
     game = Main()
