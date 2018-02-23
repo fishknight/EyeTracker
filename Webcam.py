@@ -36,7 +36,7 @@ class Webcam():
             roi_eye_color = self.frame[y:y + h, x:x + w]
             roi_eye = gray[y:y + h, x:x + w]
             eye = self.eyeCascade.detectMultiScale(roi_eye)
-            cv2.line(self.frame, (x+int(w*0.5), y),(x+int(w*0.5), y+h),(255,255,0),3) 
+            #cv2.line(self.frame, (x+int(w*0.5), y),(x+int(w*0.5), y+h),(255,255,0),3) 
             for (ex, ey, eh, ew) in eye:
                 xCoord = int(ex + (ew / 1.8))
                 yCoord = int(ey + (eh / 2.1))
