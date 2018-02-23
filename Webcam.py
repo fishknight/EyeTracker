@@ -42,7 +42,8 @@ class Webcam():
                 yCoord = int(ey + (eh / 2.1))
                 if yCoord < (y + int(h * 0.35)):                     
                     cv2.circle(roi_eye_color, (xCoord, yCoord), 3, (0, 0, 255), 1)
-                    self.coordinates.append((xCoord, yCoord))
+                    if xCoord < 100:
+                        self.coordinates.append((xCoord, yCoord))
                 #cv2.circle(roi_eye_color, (ex, ey), 3, (0, 0, 255), 1)
                 #self.coordinates.append((ex, ey))
 

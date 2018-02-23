@@ -51,13 +51,15 @@ class Main:
                         #1  2
                         #3  4
                         self.screen.fill((255,255,255))
-                        self.corners.append(self.cam.get_eyes_coordinates())
+                        if self.cam.get_eyes_coordinates():
+                            self.corners.append(self.cam.get_eyes_coordinates())
+                        else:
+                            done = True
                         cornerNumber = cornerNumber+1
                         if cornerNumber > 3:
                             calibrationMode = False
             # write logic here
-            if calibrationMode:
-                self.calibrationCircles(cornerNumber)
+            self.calibrationCircles(cornerNumber)
             #TRANSLATION INFO: X AXIS IS INVERTED
             # camera feed while app is running
             self.cam.get_webcam_feed()
@@ -66,7 +68,7 @@ class Main:
                 #label = self.textFont.render('text', 1, (255,255,255))
                 #screen.blit(label,(X, Y))
             
-            pygame.draw.circle(self.screen, (0,0,0), self.cam.get_eyes_coordinates, 2, 1)
+            pygame.draw.circle(self.screen, (0,0,0), self.current_eye_position, 2, 1)
             '''
             if len(self.cam.get_eyes_coordinates()) > 0:
                 if self.cam.get_eyes_coordinates()[0] < 90:
@@ -103,13 +105,13 @@ class Main:
     def calibrationMode(self, b = True):
             if b:
                 print "Calibration Mode"
-                if corner:
-                    for tmp in corner:
+                if self.corners:
+                    for tmp in self.corners:
                         print tmp
             else:
-                x = corner[1][0] - self.cam.get_eyes_coordinates[0]
-                y = self.cam.get_eyes_coordinates[1]
-                self.current_eye_position = (x, y)
+                x = self.corners[1][0] - self.cam.get_eyes_coordinates()[0]
+                y = self.cam.get_eyes_coordinates()[1]
+                self.current_eye_position = self.cam.get_eyes_coordinates()
 
     def calibrationCircles(self, cornerNum):
         if cornerNum == 0:
