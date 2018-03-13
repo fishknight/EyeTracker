@@ -1,12 +1,14 @@
 import pygame
 import Constants
 import Webcam
+import FileOutput()
 
 class Main:
     def __init__(self):
         # initialize important things
         pygame.init()
         self.cam = Webcam.Webcam()
+        self.file = FileOutput.FileOutput()
         self.textFont = pygame.font.SysFont('monospace', 15)
         # self.current_eye_position = (int(Constants.SCREEN_SIZE[0]/2), int(Constants.SCREEN_SIZE[1]/2) )
         # set screen width/height and caption
@@ -85,7 +87,8 @@ class Main:
 
     def stop(self):
         #close everything
-        print self.cam.coordinates
+        # print self.cam.coordinates
+        self.file.writeArrayToFile(self.cam.coordinates)
         self.cam.stop_webcam()
         pygame.quit()
         print self.corners
