@@ -62,6 +62,8 @@ class Main:
             if self.calibrationMode(calibration):
                 self.calibrationCircles(cornerNumber)
                 # print self.current_eye_position
+            else:
+                self.drawPoint(self.scaledPosition(self.cam.get_eyes_coordinates()))
             #TRANSLATION INFO: X AXIS IS INVERTED
             # camera feed while app is running
             self.cam.get_webcam_feed()
@@ -83,9 +85,10 @@ class Main:
 
     def stop(self):
         #close everything
+        print self.cam.coordinates
         self.cam.stop_webcam()
         pygame.quit()
-
+        print self.corners
         #checking purposes
         # print self.current_eye_position
         # print self.corners
@@ -109,15 +112,15 @@ class Main:
             if b:
                 print "Calibration Mode"
                 # if self.corners:
-                #     for tmp in self.corners:
-                #         print tmp
+                    # for tmp in self.corners:
+                        # print tmp
                 return True
             else:
                 print 'Calibration Mode off'
                 #corner positionss
                         #0  1
                         #2  3
-                print self.corners[3][0]
+                print self.corners
                 eyeWidth = self.avg(self.corners[1][0], self.corners[3][0]) - self.avg(self.corners[0][0], self.corners[2][0])
                 eyeHeight = self.avg(self.corners[2][1], self.corners[3][1]) - self.avg(self.corners[0][1], self.corners[1][1])
                 self.scaleX = int(Constants.SCREEN_SIZE[0]/eyeWidth)
@@ -126,16 +129,16 @@ class Main:
 
     def calibrationCircles(self, cornerNum):
         if cornerNum == 0:
-            print 'top-left'
+            # print 'top-left'
             pygame.draw.circle(self.screen, (0,0,255), (10,10), 10, 0)
         elif cornerNum == 1:
-            print 'top-right'
+            # print 'top-right'
             pygame.draw.circle(self.screen, (0,0,255), (Constants.SCREEN_SIZE[0]-10, 10), 10, 0)
         elif cornerNum == 2:
-            print 'bottom-left'
+            # print 'bottom-left'
             pygame.draw.circle(self.screen, (0,0,255), (10, Constants.SCREEN_SIZE[1]-10), 10, 0)
         elif cornerNum == 3:
-            print 'bottom-right'
+            # print 'bottom-right'
             pygame.draw.circle(self.screen, (0,0,255), (Constants.SCREEN_SIZE[0]-10, Constants.SCREEN_SIZE[1]-10), 10, 0)
 
     def avg(first, second):

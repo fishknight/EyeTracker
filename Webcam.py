@@ -22,7 +22,7 @@ class Webcam():
 
         #show camera video
         cv2.imshow('main', self.frame)
-        cv2.imshow('gray img', gray)
+        # cv2.imshow('gray img', gray)
 
     def stop_webcam(self):
         #close all windows
