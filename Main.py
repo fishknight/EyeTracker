@@ -8,7 +8,7 @@ class Main:
         pygame.init()
         self.cam = Webcam.Webcam()
         self.textFont = pygame.font.SysFont('monospace', 15)
-        self.current_eye_position = (int(Constants.SCREEN_SIZE[0]/2), int(Constants.SCREEN_SIZE[1]/2) )
+        # self.current_eye_position = (int(Constants.SCREEN_SIZE[0]/2), int(Constants.SCREEN_SIZE[1]/2) )
         # set screen width/height and caption
         # must be 16:9 aspect ratio                         
         self.screen = pygame.display.set_mode(Constants.SCREEN_SIZE)          # testing purposes only
@@ -27,7 +27,7 @@ class Main:
         linesToDraw = []
         cornerNumber = 0
         self.corners = []
-        calibrationMode = True
+        calibration = True
         # Loop until the user clicks close button
         while not done:
             # write event handlers here
@@ -46,7 +46,7 @@ class Main:
                         del linesToDraw[:]
                     if event.key == pygame.K_1:
                         self.drawPoint(self.cam.get_eyes_coordinates())
-                    if event.key == pygame.K_SPACE and calibrationMode:
+                    if event.key == pygame.K_SPACE and calibration:
                         #corner positionss
                         #1  2
                         #3  4
@@ -55,11 +55,13 @@ class Main:
                             self.corners.append(self.cam.get_eyes_coordinates())
                         else:
                             done = True
-                        cornerNumber = cornerNumber+1
                         if cornerNumber > 3:
-                            calibrationMode = False
+                            calibration = False
+                            cornerNumber = cornerNumber+1
             # write logic here
-            self.calibrationCircles(cornerNumber)
+            if self.calibrationMode(calibration):
+                self.calibrationCircles(cornerNumber)
+                # print self.current_eye_position
             #TRANSLATION INFO: X AXIS IS INVERTED
             # camera feed while app is running
             self.cam.get_webcam_feed()
@@ -85,7 +87,8 @@ class Main:
         pygame.quit()
 
         #checking purposes
-        print self.corners
+        # print self.current_eye_position
+        # print self.corners
     
     def drawPoint(self, point = (int(Constants.SCREEN_SIZE[0]/2), int(Constants.SCREEN_SIZE[1]/2))):
         pygame.draw.circle(self.screen, (0,0,0), point, 2, 1)
@@ -102,16 +105,16 @@ class Main:
             if point[0] < 90:
                 pygame.draw.circle(self.screen, (0,0,0), point, 2, 1)
 
-    def calibrationMode(self, b = True):
+    def calibrationMode(self, b):
             if b:
                 print "Calibration Mode"
                 if self.corners:
                     for tmp in self.corners:
                         print tmp
+                return True
             else:
-                x = self.corners[1][0] - self.cam.get_eyes_coordinates()[0]
-                y = self.cam.get_eyes_coordinates()[1]
-                self.current_eye_position = self.cam.get_eyes_coordinates()
+                print 'Calibration Mode off'
+                return False
 
     def calibrationCircles(self, cornerNum):
         if cornerNum == 0:
@@ -126,6 +129,8 @@ class Main:
         elif cornerNum == 3:
             print 'bottom-right'
             pygame.draw.circle(self.screen, (0,0,255), (Constants.SCREEN_SIZE[0]-10, Constants.SCREEN_SIZE[1]-10), 10, 0)
+
+    
 
 if __name__ == '__main__':
     game = Main()

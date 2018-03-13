@@ -11,8 +11,9 @@ class Webcam():
 
     #load webcam results in background
     def get_webcam_feed(self):
-        result, self.frame = self.capture.read()
-
+        result,ogFrame = self.capture.read()
+        self.frame = ogFrame.copy()
+        self.frame = cv2.flip(ogFrame, 1)
         #change video color to gray for analysis
         gray = cv2.cvtColor(self.frame, cv2.COLOR_BGR2GRAY)
 
@@ -20,7 +21,8 @@ class Webcam():
         self.get_eye_position(gray)
 
         #show camera video
-        cv2.imshow('thing', self.frame)
+        cv2.imshow('main', self.frame)
+        cv2.imshow('gray img', gray)
 
     def stop_webcam(self):
         #close all windows
