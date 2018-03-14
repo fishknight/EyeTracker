@@ -1,7 +1,7 @@
 import pygame
 import Constants
 import Webcam
-import FileOutput()
+import FileOutput
 
 class Main:
     def __init__(self):
@@ -39,13 +39,6 @@ class Main:
                 if event.type == pygame.KEYDOWN:
                     if event.key == pygame.K_ESCAPE:
                         done = True
-                    if event.key == pygame.K_j:
-                        linesToDraw = self.cam.coordinates
-                        self.draw_point_array(linesToDraw)
-                        print "right", linesToDraw
-                    if event.key == pygame.K_p:
-                        self.screen.fill((255,255,255))
-                        del linesToDraw[:]
                     if event.key == pygame.K_1:
                         self.drawPoint(self.cam.get_eyes_coordinates())
                     if event.key == pygame.K_SPACE and calibration:
@@ -53,8 +46,8 @@ class Main:
                         #0  1
                         #2  3
                         self.screen.fill((255,255,255))
-                        if self.cam.get_eyes_coordinates():
-                            self.corners.append(self.cam.get_eyes_coordinates())
+                        if self.cam.getAllCoordinates():
+                            self.corners.append(self.cam.getCurrentEyePosition())
                         else:
                             done = True
                         if cornerNumber > 3:
@@ -99,18 +92,6 @@ class Main:
     def drawPoint(self, point = (int(Constants.SCREEN_SIZE[0]/2), int(Constants.SCREEN_SIZE[1]/2))):
         pygame.draw.circle(self.screen, (0,0,0), point, 2, 1)
 
-    
-    def draw_point_array(self, coords = []):
-        '''
-        line = []
-        for x in xrange(len(coords)):
-            if x == 0 or (x % 20) == 0:
-                line.append(coords[x])
-        '''
-        for point in coords:
-            if point[0] < 90:
-                pygame.draw.circle(self.screen, (0,0,0), point, 2, 1)
-
     def calibrationMode(self, b):
             if b:
                 print "Calibration Mode"
@@ -123,11 +104,7 @@ class Main:
                 #corner positionss
                         #0  1
                         #2  3
-                print self.corners
-                eyeWidth = self.avg(self.corners[1][0], self.corners[3][0]) - self.avg(self.corners[0][0], self.corners[2][0])
-                eyeHeight = self.avg(self.corners[2][1], self.corners[3][1]) - self.avg(self.corners[0][1], self.corners[1][1])
-                self.scaleX = int(Constants.SCREEN_SIZE[0]/eyeWidth)
-                self.scaleY = int(Constants.SCREEN_SIZE[1]/eyeHeight)
+                # print self.corners
                 return False
 
     def calibrationCircles(self, cornerNum):
@@ -143,14 +120,6 @@ class Main:
         elif cornerNum == 3:
             # print 'bottom-right'
             pygame.draw.circle(self.screen, (0,0,255), (Constants.SCREEN_SIZE[0]-10, Constants.SCREEN_SIZE[1]-10), 10, 0)
-
-    def avg(first, second):
-        return int((first+second)/2)
-
-    def scaledPosition(Coordinates = ()):
-        scaledPositionX = Coordinates[0] * self.scaleX
-        scaledPositionY = Coordinates[1] * self.scaleY
-        return (scaledPositionX, scaledPositionY)
 
 if __name__ == '__main__':
     game = Main()

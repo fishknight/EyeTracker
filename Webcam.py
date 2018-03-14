@@ -8,6 +8,8 @@ class Webcam():
         self.eyeCascade = cv2.CascadeClassifier(Constants.CASCADE_EYES)
         self.faceCascade = cv2.CascadeClassifier(Constants.CASCADE_FACE)
         self.coordinates = []
+        self.scaleX = int(Constants.SCREEN_SIZE[0]/16)
+        self.scaleY = int(Constants.SCREEN_SIZE[1]/9)
 
     #load webcam results in background
     def get_webcam_feed(self):
@@ -18,10 +20,10 @@ class Webcam():
         gray = cv2.cvtColor(self.frame, cv2.COLOR_BGR2GRAY)
 
         #get eye position
-        self.get_eye_position(gray)
-
+        self.checkEyes(gray)
+        
         #show camera video
-        cv2.imshow('main', self.frame)
+        # cv2.imshow('main', self.frame)
         # cv2.imshow('gray img', gray)
 
     def stop_webcam(self):
@@ -29,7 +31,7 @@ class Webcam():
         self.capture.release()
         cv2.destroyAllWindows()
 
-    def get_eye_position(self, gray):
+    def checkEyes(self, gray):
         # check face and check eye position
         # draw rectangle around detected face and eyes
         face = self.faceCascade.detectMultiScale(gray, 1.1, 3)
@@ -42,16 +44,26 @@ class Webcam():
             for (ex, ey, eh, ew) in eye:
                 xCoord = int(ex + (ew / 1.8))
                 yCoord = int(ey + (eh / 2.1))
+                position = (xCoord, yCoord)
                 if yCoord < (y + int(h * 0.35)):                     
                     cv2.circle(roi_eye_color, (xCoord, yCoord), 3, (0, 0, 255), 1)
                     if xCoord < 100:
-                        self.coordinates.append((xCoord, yCoord))
+                        self.setCurrentEyePosition(position)
+                        self.addToCoordinates(position)
                 #cv2.circle(roi_eye_color, (ex, ey), 3, (0, 0, 255), 1)
                 #self.coordinates.append((ex, ey))
+    def addToCoordinates(self, c =(0,0)):
+        self.coordinates.append(c)
 
-    def get_eyes_coordinates(self):
-        point = (0,0)
-        if self.coordinates:
-            point = self.coordinates[len(self.coordinates)-1]
-        return point
+    def getAllCoordinates(self):
+        return self.coordinates
+
+    def setCurrentEyePosition(self, position):
+        self.currentEyePosition = position
+
+    def getCurrentEyePosition(self):
+        return self.currentEyePosition
         # should return eyes coordinates
+
+    def calculateScaledPosition(self):
+        return something
