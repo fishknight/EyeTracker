@@ -8,7 +8,7 @@ class Webcam():
         self.eyeCascade = cv2.CascadeClassifier(Constants.CASCADE_EYES)
         self.faceCascade = cv2.CascadeClassifier(Constants.CASCADE_FACE)
         self.coordinates = []
-        self.scaling = (int(Constants.SCREEN_SIZE[0]/16),int(Constants.SCREEN_SIZE[1]/9))
+        
 
     #load webcam results in background
     def get_webcam_feed(self):
@@ -22,7 +22,7 @@ class Webcam():
         self.checkEyes(gray)
         
         #show camera video
-        # cv2.imshow('main', self.frame)
+        cv2.imshow('main', self.frame)
         # cv2.imshow('gray img', gray)
 
     def stop_webcam(self):
@@ -43,15 +43,15 @@ class Webcam():
             for (ex, ey, eh, ew) in eye:
                 xCoord = int(ex + (ew / 1.8))
                 yCoord = int(ey + (eh / 2.1))
-                uncscaledPosition(xCoord, yCoord)
+                Position = (xCoord, yCoord)
                 if yCoord < (y + int(h * 0.35)):                     
                     cv2.circle(roi_eye_color, (xCoord, yCoord), 3, (0, 0, 255), 1)
                     if xCoord < 100:
-                        self.setCurrentEyePosition(self.calculateScaledPosition(uncscaledPosition))
-                        position = calculateScaledPositon(uncscaledPosition[0], uncscaledPosition[1])
-                        self.addToCoordinates(position)
+                        self.setCurrentEyePosition(Position)
+                        self.setUnscaledPostion(Position)
                 #cv2.circle(roi_eye_color, (ex, ey), 3, (0, 0, 255), 1)
                 #self.coordinates.append((ex, ey))
+
     def addToCoordinates(self, c =(0,0)):
         self.coordinates.append(c)
 
@@ -63,9 +63,49 @@ class Webcam():
 
     def getCurrentEyePosition(self):
         return self.currentEyePosition
-        # should return eyes coordinates
 
-    def calculateScaledPosition(self, x):
-        scaledX = x[0] * self.scaling[0]
-        scaledY = x[1] * self.scaling[1]
+    def calculateScaledPosition(self, position):
+        scaledX = position[0] * self.getScalingAmount(0)
+        scaledY = position[1] * self.getScalingAmount(1)
         return (scaledX, scaledY)
+    
+    def setEyeCorners(self, corners):
+        self.topLeft = corners[0]
+        self.topRight = corners[1]
+        self.bottomLeft = corners[2]
+        self.bottomRight = corners[3]
+
+    def getCornerTopLeft(self):
+        return self.topLeft
+    
+    def getCornerTopRight(self):
+        return self.topRight
+
+    def getCornerBottomLeft(self):
+        return self.bottomLeft
+    
+    def getCornerBottomRight(self):
+        return self.bottomRight
+
+    def setUnscaledPostion(self, currentPosition):
+        uncscaledPositionX = currentEyePosition[0] - self.getCornerTopLeft()[0]
+        uncscaledPositionY = currentEyePosition[1] - self.getCornerTopLeft()[1]
+        self.uncscaledPosition = (uncscaledPositionX, uncscaledPositionY)
+
+    def setScalingWidth(self):
+        self.scalingWidth = int(Constants.SCREEN_SIZE[0]/(self.getCornerTopRight()[0] - self.getCornerTopLeft()[0]))
+
+    def getScalingWidth(self):
+        return self.scalingWidth
+
+    def setScalingHeight(self):
+        self.scalingHeight = int(Constants.SCREEN_SIZE[1]/(self.getCornerBottomLeft()[1] - self.getCornerTopLeft()[1]))
+
+    def getScalingHeight(self):
+        return self.scalingHeight
+    
+    def getScalingAmount(self, dimension):
+        if dimension == 0:
+            return self.getScalingWidth()
+        elif dimension == 1
+            return self.getScalingHeight()

@@ -48,16 +48,17 @@ class Main:
                         self.screen.fill((255,255,255))
                         if self.cam.getAllCoordinates():
                             self.corners.append(self.cam.getCurrentEyePosition())
+                            cornerNumber = cornerNumber+1
                         else:
                             done = True
                         if cornerNumber > 3:
                             calibration = False
-                            cornerNumber = cornerNumber+1
+                        
             # write logic here
             if self.calibrationMode(calibration):
                 self.calibrationCircles(cornerNumber)
             else:
-                self.drawPoint(self.scaledPosition(self.cam.get_eyes_coordinates()))
+                self.cam.setEyeCorners(self.corners)
 
             # camera feed while app is running
             self.cam.get_webcam_feed()
