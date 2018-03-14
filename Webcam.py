@@ -3,12 +3,14 @@ import Constants
 
 class Webcam():
     def __init__(self):
-        # initialize webcam video and variables
+        # initialize webcam video and variables and temporary values
         self.capture = cv2.VideoCapture(0)
         self.eyeCascade = cv2.CascadeClassifier(Constants.CASCADE_EYES)
         self.faceCascade = cv2.CascadeClassifier(Constants.CASCADE_FACE)
         self.coordinates = []
-        
+        self.topLeft = (0,0)
+        self.scalingWidth = 0
+        self.scalingHeight = 0
 
     #load webcam results in background
     def get_webcam_feed(self):
@@ -22,7 +24,7 @@ class Webcam():
         self.checkEyes(gray)
         
         #show camera video
-        # cv2.imshow('main', self.frame)
+        cv2.imshow('main', self.frame)
         # cv2.imshow('gray img', gray)
 
     def stop_webcam(self):
@@ -75,6 +77,9 @@ class Webcam():
         self.bottomLeft = corners[2]
         self.bottomRight = corners[3]
 
+    def getEyeCorners(self):
+        return [self.getCornerTopLeft(), self.getCornerTopRight(), self.getCornerBottomLeft(), self.getCornerBottomRight()]
+
     def getCornerTopLeft(self):
         return self.topLeft
     
@@ -88,8 +93,8 @@ class Webcam():
         return self.bottomRight
 
     def setUnscaledPostion(self, currentPosition):
-        uncscaledPositionX = currentEyePosition[0] - self.getCornerTopLeft()[0]
-        uncscaledPositionY = currentEyePosition[1] - self.getCornerTopLeft()[1]
+        uncscaledPositionX = currentPosition[0] - self.getCornerTopLeft()[0]
+        uncscaledPositionY = currentPosition[1] - self.getCornerTopLeft()[1]
         self.uncscaledPosition = (uncscaledPositionX, uncscaledPositionY)
 
     def getUnscaledPosition(self):
@@ -110,5 +115,5 @@ class Webcam():
     def getScalingAmount(self, dimension):
         if dimension == 0:
             return self.getScalingWidth()
-        elif dimension == 1
+        elif dimension == 1:
             return self.getScalingHeight()

@@ -41,13 +41,13 @@ class Main:
                     if event.key == pygame.K_ESCAPE:
                         done = True
                     if event.key == pygame.K_1:
-                        self.drawPoint(self.cam.get_eyes_coordinates())
+                        self.drawPoint(self.cam.getCurrentEyePosition)
                     if event.key == pygame.K_SPACE and calibration:
                         #corner positionss
                         #0  1
                         #2  3
                         self.screen.fill((255,255,255))
-                        if self.cam.getAllCoordinates():
+                        if self.cam.getCurrentEyePosition:
                             self.corners.append(self.cam.getCurrentEyePosition())
                             cornerNumber = cornerNumber+1
                         else:
@@ -60,6 +60,7 @@ class Main:
                 self.calibrationCircles(cornerNumber)
             else:
                 self.drawPoint(self.cam.calculateScaledPosition(self.cam.getUnscaledPosition()))
+                self.cam.addToCoordinates(self.cam.calculateScaledPosition(self.cam.getUnscaledPosition()))
 
             if not calibration and not cornerSet:
                 self.screen.fill((0,0,0))
@@ -82,6 +83,7 @@ class Main:
     def stop(self):
         #close everything
         # self.file.writeArrayToFile(self.cam.coordinates)
+        print self.cam.getEyeCorners()
         print self.cam.getAllCoordinates()
         self.cam.stop_webcam()
         pygame.quit()
@@ -103,16 +105,16 @@ class Main:
 
     def calibrationCircles(self, cornerNum):
         if cornerNum == 0:
-            print 'top-left'
+            # print 'top-left'
             pygame.draw.circle(self.screen, (0,0,255), (10,10), 10, 0)
         elif cornerNum == 1:
-            print 'top-right'
+            # print 'top-right'
             pygame.draw.circle(self.screen, (0,0,255), (Constants.SCREEN_SIZE[0]-10, 10), 10, 0)
         elif cornerNum == 2:
-            print 'bottom-left'
+            # print 'bottom-left'
             pygame.draw.circle(self.screen, (0,0,255), (10, Constants.SCREEN_SIZE[1]-10), 10, 0)
         elif cornerNum == 3:
-            print 'bottom-right'
+            # print 'bottom-right'
             pygame.draw.circle(self.screen, (0,0,255), (Constants.SCREEN_SIZE[0]-10, Constants.SCREEN_SIZE[1]-10), 10, 0)
 
 if __name__ == '__main__':
