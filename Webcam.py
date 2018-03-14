@@ -101,13 +101,15 @@ class Webcam():
         return self.uncscaledPosition
 
     def setScalingWidth(self):
-        self.scalingWidth = int(Constants.SCREEN_SIZE[0]/(self.getCornerTopRight()[0] - self.getCornerTopLeft()[0]))
+        # self.scalingWidth = int(Constants.SCREEN_SIZE[0]/(self.getCornerTopRight()[0] - self.getCornerTopLeft()[0]))
+        self.scalingWidth = 64
 
     def getScalingWidth(self):
         return self.scalingWidth
 
     def setScalingHeight(self):
-        self.scalingHeight = int(Constants.SCREEN_SIZE[1]/(self.getCornerBottomLeft()[1] - self.getCornerTopLeft()[1]))
+        # self.scalingHeight = int(Constants.SCREEN_SIZE[1]/(self.getCornerBottomLeft()[1] - self.getCornerTopLeft()[1]))
+        self.scalingHeight = 36
 
     def getScalingHeight(self):
         return self.scalingHeight

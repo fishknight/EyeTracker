@@ -56,10 +56,10 @@ class Main:
                             calibration = False
 
             # write logic here
-            if self.calibrationMode(calibration):
+            if calibration:
                 self.calibrationCircles(cornerNumber)
             else:
-                self.drawPoint(self.cam.calculateScaledPosition(self.cam.getUnscaledPosition()))
+                # self.drawPoint(self.cam.calculateScaledPosition(self.cam.getUnscaledPosition()))
                 self.cam.addToCoordinates(self.cam.calculateScaledPosition(self.cam.getUnscaledPosition()))
 
             if not calibration and not cornerSet:
