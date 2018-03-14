@@ -30,6 +30,7 @@ class Main:
         cornerNumber = 0
         self.corners = []
         calibration = True
+        cornerSet = False
         # Loop until the user clicks close button
         while not done:
             # write event handlers here
@@ -53,13 +54,19 @@ class Main:
                             done = True
                         if cornerNumber > 3:
                             calibration = False
-                        
+
             # write logic here
             if self.calibrationMode(calibration):
                 self.calibrationCircles(cornerNumber)
             else:
-                self.cam.setEyeCorners(self.corners)
+                self.drawPoint(self.cam.calculateScaledPosition(self.cam.getUnscaledPosition()))
 
+            if not calibration and not cornerSet:
+                self.screen.fill((0,0,0))
+                self.cam.setEyeCorners(self.corners)
+                self.cam.setScalingWidth()
+                self.cam.setScalingHeight()
+                cornerSet = True
             # camera feed while app is running
             self.cam.get_webcam_feed()
 
@@ -75,9 +82,10 @@ class Main:
     def stop(self):
         #close everything
         # self.file.writeArrayToFile(self.cam.coordinates)
+        print self.cam.getAllCoordinates()
         self.cam.stop_webcam()
         pygame.quit()
-        print self.corners
+        # print self.corners
         #checking purposes
         # print self.current_eye_position
         # print self.corners
@@ -86,12 +94,12 @@ class Main:
         pygame.draw.circle(self.screen, (0,0,0), point, 2, 1)
 
     def calibrationMode(self, b):
-            if b:
-                print "Calibration Mode on"
-                return True
-            else:
-                print 'Calibration Mode off'
-                return False
+        if b:
+            print "Calibration Mode on"
+            return True
+        else:
+            print 'Calibration Mode off'
+            return False
 
     def calibrationCircles(self, cornerNum):
         if cornerNum == 0:

@@ -22,7 +22,7 @@ class Webcam():
         self.checkEyes(gray)
         
         #show camera video
-        cv2.imshow('main', self.frame)
+        # cv2.imshow('main', self.frame)
         # cv2.imshow('gray img', gray)
 
     def stop_webcam(self):
@@ -91,6 +91,9 @@ class Webcam():
         uncscaledPositionX = currentEyePosition[0] - self.getCornerTopLeft()[0]
         uncscaledPositionY = currentEyePosition[1] - self.getCornerTopLeft()[1]
         self.uncscaledPosition = (uncscaledPositionX, uncscaledPositionY)
+
+    def getUnscaledPosition(self):
+        return self.uncscaledPosition
 
     def setScalingWidth(self):
         self.scalingWidth = int(Constants.SCREEN_SIZE[0]/(self.getCornerTopRight()[0] - self.getCornerTopLeft()[0]))
