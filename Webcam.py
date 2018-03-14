@@ -8,8 +8,7 @@ class Webcam():
         self.eyeCascade = cv2.CascadeClassifier(Constants.CASCADE_EYES)
         self.faceCascade = cv2.CascadeClassifier(Constants.CASCADE_FACE)
         self.coordinates = []
-        self.scaleX = int(Constants.SCREEN_SIZE[0]/16)
-        self.scaleY = int(Constants.SCREEN_SIZE[1]/9)
+        self.scaling = (int(Constants.SCREEN_SIZE[0]/16),int(Constants.SCREEN_SIZE[1]/9))
 
     #load webcam results in background
     def get_webcam_feed(self):
@@ -44,11 +43,12 @@ class Webcam():
             for (ex, ey, eh, ew) in eye:
                 xCoord = int(ex + (ew / 1.8))
                 yCoord = int(ey + (eh / 2.1))
-                position = (xCoord, yCoord)
+                uncscaledPosition(xCoord, yCoord)
                 if yCoord < (y + int(h * 0.35)):                     
                     cv2.circle(roi_eye_color, (xCoord, yCoord), 3, (0, 0, 255), 1)
                     if xCoord < 100:
-                        self.setCurrentEyePosition(position)
+                        self.setCurrentEyePosition(self.calculateScaledPosition(uncscaledPosition))
+                        position = calculateScaledPositon(uncscaledPosition[0], uncscaledPosition[1])
                         self.addToCoordinates(position)
                 #cv2.circle(roi_eye_color, (ex, ey), 3, (0, 0, 255), 1)
                 #self.coordinates.append((ex, ey))
@@ -65,5 +65,7 @@ class Webcam():
         return self.currentEyePosition
         # should return eyes coordinates
 
-    def calculateScaledPosition(self):
-        return something
+    def calculateScaledPosition(self, x):
+        scaledX = x[0] * self.scaling[0]
+        scaledY = x[1] * self.scaling[1]
+        return (scaledX, scaledY)
