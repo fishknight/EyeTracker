@@ -1,14 +1,13 @@
 import pygame
+import json
 import Constants
 import Webcam
-# import FileOutput
 
 class Main:
     def __init__(self):
         # initialize important things
         pygame.init()
         self.cam = Webcam.Webcam()
-        # self.file = FileOutput.FileOutput()
         self.textFont = pygame.font.SysFont('monospace', 15)
         # self.current_eye_position = (int(Constants.SCREEN_SIZE[0]/2), int(Constants.SCREEN_SIZE[1]/2) )
         # set screen width/height and caption
@@ -83,14 +82,11 @@ class Main:
     def stop(self):
         #close everything
         # self.file.writeArrayToFile(self.cam.coordinates)
+        self.writeToFile(self.cam.getAllCoordinates())
         print self.cam.getEyeCorners()
         print self.cam.getAllCoordinates()
         self.cam.stop_webcam()
         pygame.quit()
-        # print self.corners
-        #checking purposes
-        # print self.current_eye_position
-        # print self.corners
     
     def drawPoint(self, point = (int(Constants.SCREEN_SIZE[0]/2), int(Constants.SCREEN_SIZE[1]/2))):
         pygame.draw.circle(self.screen, (0,0,0), point, 2, 1)
@@ -116,6 +112,11 @@ class Main:
         elif cornerNum == 3:
             # print 'bottom-right'
             pygame.draw.circle(self.screen, (0,0,255), (Constants.SCREEN_SIZE[0]-10, Constants.SCREEN_SIZE[1]-10), 10, 0)
+
+    def writeToFile(self, array):
+        with open(Constants.FILENAME, 'w') as f:
+            json.dump(array, f)
+
 
 if __name__ == '__main__':
     game = Main()
