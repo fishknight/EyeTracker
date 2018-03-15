@@ -9,7 +9,6 @@ class Main:
         pygame.init()
         self.cam = Webcam.Webcam()
         self.textFont = pygame.font.SysFont('monospace', 15)
-        # self.current_eye_position = (int(Constants.SCREEN_SIZE[0]/2), int(Constants.SCREEN_SIZE[1]/2) )
         # set screen width/height and caption
         # must be 16:9 aspect ratio                         
         self.screen = pygame.display.set_mode(Constants.SCREEN_SIZE)          # testing purposes only
@@ -30,8 +29,15 @@ class Main:
         self.corners = []
         calibration = True
         cornerSet = False
+        imageNumber = 0
+        prevTime = pygame.time.get_ticks()
+        self.bg = []
+
         # Loop until the user clicks close button
         while not done:
+            # camera feed while app is running
+            self.cam.get_webcam_feed()
+
             # write event handlers here
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
@@ -46,11 +52,12 @@ class Main:
                         #0  1
                         #2  3
                         self.screen.fill((255,255,255))
-                        if self.cam.getCurrentEyePosition:
+                        if self.cam.getCurrentEyePosition():
                             self.corners.append(self.cam.getCurrentEyePosition())
                             cornerNumber = cornerNumber+1
                         else:
                             done = True
+                            print 'No eyes detected during calibration'
                         if cornerNumber > 3:
                             calibration = False
 
@@ -60,15 +67,22 @@ class Main:
             else:
                 # self.drawPoint(self.cam.calculateScaledPosition(self.cam.getUnscaledPosition()))
                 self.cam.addToCoordinates(self.cam.calculateScaledPosition(self.cam.getUnscaledPosition()))
-
+            now = pygame.time.get_ticks()
             if not calibration and not cornerSet:
                 self.screen.fill((0,0,0))
+                prevTime = pygame.time.get_ticks()
                 self.cam.setEyeCorners(self.corners)
                 self.cam.setScalingWidth()
                 self.cam.setScalingHeight()
                 cornerSet = True
-            # camera feed while app is running
-            self.cam.get_webcam_feed()
+            # if Constant.SECONDS has passed, load next image
+            elif not calibration and cornerSet:
+                if (now - prevTime) >= Constants.SECONDS:
+                    prevTime = pygame.time.get_ticks()
+                    self.screen.blit(self.bg[imageNumber], (0,0))
+                    imageNumber = imageNumber + 1
+            
+            
 
             # write draw code here
                 #label = self.textFont.render('text', 1, (255,255,255))
@@ -91,13 +105,9 @@ class Main:
     def drawPoint(self, point = (int(Constants.SCREEN_SIZE[0]/2), int(Constants.SCREEN_SIZE[1]/2))):
         pygame.draw.circle(self.screen, (0,0,0), point, 2, 1)
 
-    def calibrationMode(self, b):
-        if b:
-            print "Calibration Mode on"
-            return True
-        else:
-            print 'Calibration Mode off'
-            return False
+    def loadImages(self, images):
+        for i in range(10):
+            self.bg.append(pygame.image.load(images[i]))
 
     def calibrationCircles(self, cornerNum):
         if cornerNum == 0:
