@@ -1,4 +1,4 @@
-SCREEN_SIZE = (1024, 576)  #dont forget to change this
+SCREEN_SIZE = (1366, 768)  #dont forget to change this
 CASCADE_RIGHT_EYE = 'haarcascade_right_eye.xml'
 CASCADE_LEFT_EYE = 'haarcascade_left_eye.xml'
 CASCADE_EYES = 'haarcascade_eye.xml'
@@ -15,4 +15,7 @@ img07 = 'image7.jpg'
 img08 = 'image8.jpg'
 img09 = 'image9.jpg'
 img10 = 'image10.jpg'
+img11 = 'image11.jpg'
+img12 = 'image12.jpg'
+# IMAGES = [img01, img02, img03, img04, img05, img06, img07, img08, img09, img10, img11, img12]
 IMAGES = [img01, img02, img03, img04, img05, img06, img07, img08, img09, img10]

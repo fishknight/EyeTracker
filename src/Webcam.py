@@ -72,10 +72,10 @@ class Webcam():
         return (scaledX, scaledY)
     
     def setEyeCorners(self, corners):
-        self.topLeft = corners[0]
-        self.topRight = corners[1]
-        self.bottomLeft = corners[2]
-        self.bottomRight = corners[3]
+        self.topLeft = ((corners[0][0] - 5), (corners[0][1] - 5))
+        self.topRight = ((corners[1][0] + 5), (corners[1][1] - 5))
+        self.bottomLeft = ((corners[2][0] - 5), (corners[2][1] + 5)) 
+        self.bottomRight = ((corners[3][0] + 5), (corners[3][1] + 5))
 
     def getEyeCorners(self):
         return [self.getCornerTopLeft(), self.getCornerTopRight(), self.getCornerBottomLeft(), self.getCornerBottomRight()]

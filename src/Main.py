@@ -11,8 +11,8 @@ class Main:
         self.textFont = pygame.font.SysFont('monospace', 15)
         # set screen width/height and caption
         # must be 16:9 aspect ratio                         
-        self.screen = pygame.display.set_mode(Constants.SCREEN_SIZE)          # testing purposes only
-        # self.screen = pygame.display.set_mode(Constants.SCREEN_SIZE, pygame.FULLSCREEN)        # actual size
+        # self.screen = pygame.display.set_mode(Constants.SCREEN_SIZE)          # testing purposes only
+        self.screen = pygame.display.set_mode(Constants.SCREEN_SIZE, pygame.FULLSCREEN)        # actual size
         pygame.display.set_caption('Eye Tracker')
 
         # initialize clock. used later in the loop.
@@ -75,11 +75,18 @@ class Main:
                 self.cam.setScalingWidth()
                 self.cam.setScalingHeight()
                 cornerSet = True
+                self.loadImages(Constants.IMAGES)
             # if Constant.SECONDS has passed, load next image
             elif not calibration and cornerSet:
                 if (now - prevTime) >= Constants.SECONDS:
                     prevTime = pygame.time.get_ticks()
-                    self.screen.blit(self.bg[imageNumber], (0,0))
+                    # print len(self.bg)
+                    if imageNumber < len(self.bg):
+                        self.screen.fill((128,128,128))
+                        self.screen.blit(self.bg[imageNumber], (0,0))
+                    else:
+                        self.screen.fill((255,255,255))
+                    # print self.bg
                     imageNumber = imageNumber + 1
             
             
@@ -97,8 +104,8 @@ class Main:
         #close everything
         # self.file.writeArrayToFile(self.cam.coordinates)
         self.writeToFile(self.cam.getAllCoordinates())
-        print self.cam.getEyeCorners()
-        print self.cam.getAllCoordinates()
+        # print self.cam.getEyeCorners()
+        # print self.cam.getAllCoordinates()
         self.cam.stop_webcam()
         pygame.quit()
     
@@ -106,7 +113,7 @@ class Main:
         pygame.draw.circle(self.screen, (0,0,0), point, 2, 1)
 
     def loadImages(self, images):
-        for i in range(10):
+        for i in range(len(images)):
             self.bg.append(pygame.image.load(images[i]))
 
     def calibrationCircles(self, cornerNum):
